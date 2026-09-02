@@ -3,7 +3,9 @@
 from src.graph import (
     build_triage_graph,
     route_after_investigation,
+    route_after_investigation_hitl,
     route_after_remediation,
+    route_after_remediation_hitl,
     TriageState,
 )
 from src.models import (
@@ -59,7 +61,7 @@ def test_route_investigation_escalates():
         "human_decision": "",
         "status": "pending",
     }
-    assert route_after_investigation(state) == "human_review"
+    assert route_after_investigation(state) == "investigation_hitl"
 
 
 def test_route_investigation_continues():
@@ -79,6 +81,34 @@ def test_route_investigation_continues():
     assert route_after_investigation(state) == "remediate"
 
 
+def test_route_investigation_hitl_approved():
+    state: TriageState = {
+        "alert": _make_alert(),
+        "classification": _make_classification(Severity.HIGH),
+        "investigation": Investigation(
+            findings=["breach"], affected_scope="prod", requires_escalation=True
+        ),
+        "remediation": None,
+        "human_decision": "Approved",
+        "status": "investigation_approved",
+    }
+    assert route_after_investigation_hitl(state) == "remediate"
+
+
+def test_route_investigation_hitl_rejected():
+    state: TriageState = {
+        "alert": _make_alert(),
+        "classification": _make_classification(Severity.HIGH),
+        "investigation": Investigation(
+            findings=["breach"], affected_scope="prod", requires_escalation=True
+        ),
+        "remediation": None,
+        "human_decision": "Rejected",
+        "status": "closed",
+    }
+    assert route_after_investigation_hitl(state) == "close_incident"
+
+
 def test_route_remediation_escalates_critical():
     state: TriageState = {
         "alert": _make_alert(),
@@ -94,7 +124,7 @@ def test_route_remediation_escalates_critical():
         "human_decision": "",
         "status": "pending",
     }
-    assert route_after_remediation(state) == "human_review"
+    assert route_after_remediation(state) == "remediation_hitl"
 
 
 def test_route_remediation_escalates_approval_needed():
@@ -113,7 +143,7 @@ def test_route_remediation_escalates_approval_needed():
         "human_decision": "",
         "status": "pending",
     }
-    assert route_after_remediation(state) == "human_review"
+    assert route_after_remediation(state) == "remediation_hitl"
 
 
 def test_route_remediation_auto_resolves_low():
@@ -132,3 +162,35 @@ def test_route_remediation_auto_resolves_low():
         "status": "pending",
     }
     assert route_after_remediation(state) == "auto_resolve"
+
+
+def test_route_remediation_hitl_approved():
+    state: TriageState = {
+        "alert": _make_alert(),
+        "classification": _make_classification(Severity.CRITICAL),
+        "investigation": Investigation(
+            findings=["test"], affected_scope="all", requires_escalation=False
+        ),
+        "remediation": Remediation(
+            immediate_actions=["isolate"], long_term_fixes=["harden"]
+        ),
+        "human_decision": "Approved",
+        "status": "remediation_approved",
+    }
+    assert route_after_remediation_hitl(state) == "execute_and_log"
+
+
+def test_route_remediation_hitl_rejected():
+    state: TriageState = {
+        "alert": _make_alert(),
+        "classification": _make_classification(Severity.CRITICAL),
+        "investigation": Investigation(
+            findings=["test"], affected_scope="all", requires_escalation=False
+        ),
+        "remediation": Remediation(
+            immediate_actions=["isolate"], long_term_fixes=["harden"]
+        ),
+        "human_decision": "Rejected",
+        "status": "closed",
+    }
+    assert route_after_remediation_hitl(state) == "close_incident"

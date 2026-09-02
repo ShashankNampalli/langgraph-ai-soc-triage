@@ -1,7 +1,7 @@
 [project]
-name = "security-triage-agent"
+name = "langgraph-ai-soc-triage"
 version = "0.1.0"
-description = "Multi-agent security alert triage system built with LangGraph"
+description = "LangGraph AI SOC triage — multi-agent incident response with human-in-the-loop gates"
 requires-python = ">=3.11"
 dependencies = [
     "langgraph>=0.2.0",
@@ -9,12 +9,36 @@ dependencies = [
     "langchain-openai>=0.2.0",
     "pydantic>=2.0",
     "rich>=13.0",
+    "python-dotenv>=1.0.0",
+    "httpx>=0.27.0",
 ]
 
 [project.optional-dependencies]
+local = [
+    "langchain-ollama>=0.2.0",
+]
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
+]
+rag = [
+    "llama-index-core>=0.11.0",
+    "llama-index-vector-stores-qdrant>=0.3.0",
+    "llama-index-embeddings-huggingface>=0.3.0",
+    "qdrant-client>=1.9.0",
+    "datasets>=2.20.0",
+    "sentence-transformers>=3.0.0",
+]
+observability = [
+    "langfuse>=2.0.0",
+]
+ui = [
+    "streamlit>=1.28.0",
+    "datasets>=2.20.0",
+    "huggingface_hub>=0.23.0",
+]
+all = [
+    "langgraph-ai-soc-triage[dev,rag,observability,ui]",
 ]
 
 [tool.pytest.ini_options]

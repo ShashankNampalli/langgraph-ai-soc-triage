@@ -1,6 +1,14 @@
 """Tests for knowledge base / playbook retrieval."""
 
+import pytest
+
 from src.knowledge_base import get_playbook, search_playbooks, PLAYBOOKS
+
+
+@pytest.fixture(autouse=True)
+def embedded_playbooks_only(monkeypatch):
+    monkeypatch.setenv("USE_INGESTED_PLAYBOOKS", "false")
+    monkeypatch.setenv("RAG_ENABLED", "false")
 
 
 def test_get_playbook_valid_category():

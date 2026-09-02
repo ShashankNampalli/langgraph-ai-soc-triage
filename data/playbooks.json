@@ -1,0 +1,363 @@
+[
+  {
+    "category": "malware",
+    "title": "Ransomware Response",
+    "incident_type": "ransomware",
+    "immediate": [
+      "Isolate host from network, disable compromised user account"
+    ],
+    "investigation": [
+      "Triage alert, confirm IOC via EDR, snapshot affected host"
+    ],
+    "long_term": [
+      "Remove malicious binaries, patch vulnerabilities",
+      "Restore from backups, monitor for reinfection",
+      "Conduct IR debrief, update detection rules, user awareness training"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Execution', 'technique': 'User Execution'}, {'tactic': 'Impact', 'technique': 'Data Encrypted for Impact'}]",
+    "severity": "High",
+    "text": "Incident type: ransomware. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Execution', 'technique': 'User Execution'}, {'tactic': 'Impact', 'technique': 'Data Encrypted for Impact'}]. Vector: Email Attachment (Phishing). Phase: Identification. Action: Triage alert, confirm IOC via EDR, snapshot affected host. Tools: ['CrowdStrike Falcon', 'Velociraptor']. Response time: . Phase: Containment. Action: Isolate host from network, disable compromised user account. Tools: ['EDR', 'SIEM', 'Firewall']. Response time: . Phase: Eradication. Action: Remove malicious binaries, patch vulnerabilities. Tools: ['YARA', 'Patching Platform']. Response time: . Phase: Recovery. Action: Restore from backups, monitor for reinfection. Tools: ['Veeam', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Conduct IR debrief, update detection rules, user awareness training. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "data_exfiltration",
+    "title": "Data Breach Response",
+    "incident_type": "data breach",
+    "immediate": [
+      "Block malicious IPs, revoke stolen credentials"
+    ],
+    "investigation": [
+      "Analyze SIEM logs, identify compromised endpoints"
+    ],
+    "long_term": [
+      "Patch web server vulnerability, scan for backdoors",
+      "Restore compromised data, implement MFA",
+      "Update WAF rules, conduct penetration testing"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Collection', 'technique': 'Data from Information Repositories'}, {'tactic': 'Exfiltration', 'technique': 'Exfiltration Over C2 Channel'}]",
+    "severity": "Critical",
+    "text": "Incident type: data breach. Severity: Critical. Tactics: [{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Collection', 'technique': 'Data from Information Repositories'}, {'tactic': 'Exfiltration', 'technique': 'Exfiltration Over C2 Channel'}]. Vector: Exploited Web Vulnerability. Phase: Identification. Action: Analyze SIEM logs, identify compromised endpoints. Tools: ['Splunk', 'Wazuh']. Response time: . Phase: Containment. Action: Block malicious IPs, revoke stolen credentials. Tools: ['Firewall', 'IAM Controls']. Response time: . Phase: Eradication. Action: Patch web server vulnerability, scan for backdoors. Tools: ['Nessus', 'OpenVAS']. Response time: . Phase: Recovery. Action: Restore compromised data, implement MFA. Tools: ['Backup Exec', 'Okta']. Response time: . Phase: Lessons Learned. Action: Update WAF rules, conduct penetration testing. Tools: ['Burp Suite', 'MISP']. Response time: ."
+  },
+  {
+    "category": "credential_dumping",
+    "title": "Credential Dumping Response",
+    "incident_type": "credential dumping",
+    "immediate": [
+      "Isolate workstation, reset compromised credentials"
+    ],
+    "investigation": [
+      "Confirm alert via EDR, collect memory dump"
+    ],
+    "long_term": [
+      "Remove malicious scripts, update AV signatures",
+      "Reimage workstation, enforce USB restrictions",
+      "Review USB policy, train users on physical security"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'External Hardware'}, {'tactic': 'Credential Access', 'technique': 'OS Credential Dumping'}, {'tactic': 'Lateral Movement', 'technique': 'Pass the Hash'}]",
+    "severity": "Medium",
+    "text": "Incident type: credential dumping. Severity: Medium. Tactics: [{'tactic': 'Initial Access', 'technique': 'External Hardware'}, {'tactic': 'Credential Access', 'technique': 'OS Credential Dumping'}, {'tactic': 'Lateral Movement', 'technique': 'Pass the Hash'}]. Vector: Malicious USB Device. Phase: Identification. Action: Confirm alert via EDR, collect memory dump. Tools: ['Carbon Black', 'Volatility']. Response time: . Phase: Containment. Action: Isolate workstation, reset compromised credentials. Tools: ['Active Directory', 'EDR']. Response time: . Phase: Eradication. Action: Remove malicious scripts, update AV signatures. Tools: ['YARA', 'Microsoft Defender']. Response time: . Phase: Recovery. Action: Reimage workstation, enforce USB restrictions. Tools: ['SCCM', 'Group Policy']. Response time: . Phase: Lessons Learned. Action: Review USB policy, train users on physical security. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "ddos_attack",
+    "title": "Ddos Attack Response",
+    "incident_type": "ddos attack",
+    "immediate": [
+      "Activate DDoS mitigation, reroute traffic"
+    ],
+    "investigation": [
+      "Analyze traffic patterns, confirm DDoS indicators"
+    ],
+    "long_term": [
+      "Block botnet IPs, update WAF rules",
+      "Monitor traffic, restore normal operations",
+      "Review DDoS protections, simulate attack scenarios"
+    ],
+    "tactics": "[{'tactic': 'Impact', 'technique': 'Network Denial of Service'}, {'tactic': 'Command and Control', 'technique': 'Botnet'}]",
+    "severity": "High",
+    "text": "Incident type: ddos attack. Severity: High. Tactics: [{'tactic': 'Impact', 'technique': 'Network Denial of Service'}, {'tactic': 'Command and Control', 'technique': 'Botnet'}]. Vector: Botnet Traffic. Phase: Identification. Action: Analyze traffic patterns, confirm DDoS indicators. Tools: ['Cloudflare', 'Wireshark']. Response time: . Phase: Containment. Action: Activate DDoS mitigation, reroute traffic. Tools: ['Cloudflare', 'Akamai']. Response time: . Phase: Eradication. Action: Block botnet IPs, update WAF rules. Tools: ['Firewall', 'Snort']. Response time: . Phase: Recovery. Action: Monitor traffic, restore normal operations. Tools: ['Nagios', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Review DDoS protections, simulate attack scenarios. Tools: ['hping3', 'MISP']. Response time: ."
+  },
+  {
+    "category": "anomalous_behavior",
+    "title": "Sql Injection Response",
+    "incident_type": "sql injection",
+    "immediate": [
+      "Block offending IPs, sanitize inputs"
+    ],
+    "investigation": [
+      "Review WAF logs, validate SQL injection attempt"
+    ],
+    "long_term": [
+      "Patch SQL vulnerabilities, audit database",
+      "Restore database integrity, monitor for anomalies",
+      "Update input validation, train developers"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Collection', 'technique': 'Data from Databases'}, {'tactic': 'Exfiltration', 'technique': 'Exfiltration Over Web Service'}]",
+    "severity": "Critical",
+    "text": "Incident type: sql injection. Severity: Critical. Tactics: [{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Collection', 'technique': 'Data from Databases'}, {'tactic': 'Exfiltration', 'technique': 'Exfiltration Over Web Service'}]. Vector: Web Form Input. Phase: Identification. Action: Review WAF logs, validate SQL injection attempt. Tools: ['ModSecurity', 'Splunk']. Response time: . Phase: Containment. Action: Block offending IPs, sanitize inputs. Tools: ['Firewall', 'WAF']. Response time: . Phase: Eradication. Action: Patch SQL vulnerabilities, audit database. Tools: ['SQLMap', 'Tenable']. Response time: . Phase: Recovery. Action: Restore database integrity, monitor for anomalies. Tools: ['MySQL Backup', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update input validation, train developers. Tools: ['OWASP ZAP', 'MISP']. Response time: ."
+  },
+  {
+    "category": "unauthorized_access",
+    "title": "Phishing Response",
+    "incident_type": "phishing",
+    "immediate": [
+      "Block sender domain, quarantine emails"
+    ],
+    "investigation": [
+      "Analyze email headers, confirm phishing IOCs"
+    ],
+    "long_term": [
+      "Reset compromised credentials, scan for malware",
+      "Notify users, implement email filters",
+      "Conduct phishing awareness training, update email rules"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}]",
+    "severity": "Medium",
+    "text": "Incident type: phishing. Severity: Medium. Tactics: [{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}]. Vector: Spear Phishing Email. Phase: Identification. Action: Analyze email headers, confirm phishing IOCs. Tools: ['Proofpoint', 'Mimecast']. Response time: . Phase: Containment. Action: Block sender domain, quarantine emails. Tools: ['Email Gateway', 'SIEM']. Response time: . Phase: Eradication. Action: Reset compromised credentials, scan for malware. Tools: ['Active Directory', 'CrowdStrike']. Response time: . Phase: Recovery. Action: Notify users, implement email filters. Tools: ['Microsoft 365', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Conduct phishing awareness training, update email rules. Tools: ['KnowBe4', 'MISP']. Response time: ."
+  },
+  {
+    "category": "malware_infection",
+    "title": "Malware Infection Response",
+    "incident_type": "malware infection",
+    "immediate": [
+      "Isolate server, block C2 communication"
+    ],
+    "investigation": [
+      "Confirm malware via AV, collect IOCs"
+    ],
+    "long_term": [
+      "Remove malware, update AV signatures",
+      "Restore files, monitor for reinfection",
+      "Review download policies, update detection rules"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Drive-by Compromise'}, {'tactic': 'Execution', 'technique': 'Malicious File Execution'}]",
+    "severity": "High",
+    "text": "Incident type: malware infection. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Drive-by Compromise'}, {'tactic': 'Execution', 'technique': 'Malicious File Execution'}]. Vector: Malicious Download. Phase: Identification. Action: Confirm malware via AV, collect IOCs. Tools: ['Microsoft Defender', 'VirusTotal']. Response time: . Phase: Containment. Action: Isolate server, block C2 communication. Tools: ['EDR', 'Firewall']. Response time: . Phase: Eradication. Action: Remove malware, update AV signatures. Tools: ['Malwarebytes', 'YARA']. Response time: . Phase: Recovery. Action: Restore files, monitor for reinfection. Tools: ['Veeam', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Review download policies, update detection rules. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "privilege_escalation",
+    "title": "Privilege Escalation Response",
+    "incident_type": "privilege escalation",
+    "immediate": [
+      "Isolate server, revoke elevated privileges"
+    ],
+    "investigation": [
+      "Analyze audit logs, confirm privilege escalation"
+    ],
+    "long_term": [
+      "Patch kernel vulnerability, remove malicious processes",
+      "Rebuild server, enforce least privilege",
+      "Update hardening policies, conduct security audit"
+    ],
+    "tactics": "[{'tactic': 'Privilege Escalation', 'technique': 'Exploitation for Privilege Escalation'}, {'tactic': 'Persistence', 'technique': 'Valid Accounts'}]",
+    "severity": "Critical",
+    "text": "Incident type: privilege escalation. Severity: Critical. Tactics: [{'tactic': 'Privilege Escalation', 'technique': 'Exploitation for Privilege Escalation'}, {'tactic': 'Persistence', 'technique': 'Valid Accounts'}]. Vector: Exploited Kernel Vulnerability. Phase: Identification. Action: Analyze audit logs, confirm privilege escalation. Tools: ['Splunk', 'Auditd']. Response time: . Phase: Containment. Action: Isolate server, revoke elevated privileges. Tools: ['Firewall', 'IAM Controls']. Response time: . Phase: Eradication. Action: Patch kernel vulnerability, remove malicious processes. Tools: ['Nessus', 'YARA']. Response time: . Phase: Recovery. Action: Rebuild server, enforce least privilege. Tools: ['Ansible', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update hardening policies, conduct security audit. Tools: ['OpenSCAP', 'MISP']. Response time: ."
+  },
+  {
+    "category": "unauthorized_access",
+    "title": "Insider Threat Response",
+    "incident_type": "insider threat",
+    "immediate": [
+      "Suspend user account, restrict database access"
+    ],
+    "investigation": [
+      "Review DLP logs, confirm insider activity"
+    ],
+    "long_term": [
+      "Audit user permissions, revoke unnecessary access",
+      "Restore data integrity, monitor for anomalies",
+      "Update insider threat policies, conduct training"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Valid Accounts'}, {'tactic': 'Collection', 'technique': 'Data from Information Repositories'}]",
+    "severity": "High",
+    "text": "Incident type: insider threat. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Valid Accounts'}, {'tactic': 'Collection', 'technique': 'Data from Information Repositories'}]. Vector: Compromised Insider Account. Phase: Identification. Action: Review DLP logs, confirm insider activity. Tools: ['Symantec DLP', 'Splunk']. Response time: . Phase: Containment. Action: Suspend user account, restrict database access. Tools: ['IAM Controls', 'Database Firewall']. Response time: . Phase: Eradication. Action: Audit user permissions, revoke unnecessary access. Tools: ['SailPoint', 'Tenable']. Response time: . Phase: Recovery. Action: Restore data integrity, monitor for anomalies. Tools: ['MySQL Backup', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update insider threat policies, conduct training. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "brute_force_attack",
+    "title": "Brute Force Attack Response",
+    "incident_type": "brute force attack",
+    "immediate": [
+      "Block offending IPs, enforce account lockout"
+    ],
+    "investigation": [
+      "Analyze login attempts, confirm brute force activity"
+    ],
+    "long_term": [
+      "Update password policies, scan for compromised accounts",
+      "Reset affected passwords, implement MFA",
+      "Review authentication logs, update VPN security"
+    ],
+    "tactics": "[{'tactic': 'Credential Access', 'technique': 'Brute Force'}, {'tactic': 'Initial Access', 'technique': 'Valid Accounts'}]",
+    "severity": "Medium",
+    "text": "Incident type: brute force attack. Severity: Medium. Tactics: [{'tactic': 'Credential Access', 'technique': 'Brute Force'}, {'tactic': 'Initial Access', 'technique': 'Valid Accounts'}]. Vector: Credential Stuffing. Phase: Identification. Action: Analyze login attempts, confirm brute force activity. Tools: ['Snort', 'Splunk']. Response time: . Phase: Containment. Action: Block offending IPs, enforce account lockout. Tools: ['Firewall', 'IAM Controls']. Response time: . Phase: Eradication. Action: Update password policies, scan for compromised accounts. Tools: ['Active Directory', 'Nessus']. Response time: . Phase: Recovery. Action: Reset affected passwords, implement MFA. Tools: ['Okta', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Review authentication logs, update VPN security. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "command_and_control",
+    "title": "Command And Control Response",
+    "incident_type": "command and control",
+    "immediate": [
+      "Block C2 domains, isolate endpoint"
+    ],
+    "investigation": [
+      "Analyze network traffic, confirm C2 activity"
+    ],
+    "long_term": [
+      "Remove malicious scripts, update IDS rules",
+      "Reimage endpoint, monitor network",
+      "Update threat intelligence, conduct training"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Drive-by Compromise'}, {'tactic': 'Command and Control', 'technique': 'Application Layer Protocol'}]",
+    "severity": "High",
+    "text": "Incident type: command and control. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Drive-by Compromise'}, {'tactic': 'Command and Control', 'technique': 'Application Layer Protocol'}]. Vector: Malicious Script Download. Phase: Identification. Action: Analyze network traffic, confirm C2 activity. Tools: ['Wireshark', 'Zeek']. Response time: . Phase: Containment. Action: Block C2 domains, isolate endpoint. Tools: ['Firewall', 'EDR']. Response time: . Phase: Eradication. Action: Remove malicious scripts, update IDS rules. Tools: ['YARA', 'Snort']. Response time: . Phase: Recovery. Action: Reimage endpoint, monitor network. Tools: ['Ansible', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update threat intelligence, conduct training. Tools: ['MISP', 'Google Docs']. Response time: ."
+  },
+  {
+    "category": "data_leak",
+    "title": "Data Leak Response",
+    "incident_type": "data leak",
+    "immediate": [
+      "Restrict bucket access, revoke public links"
+    ],
+    "investigation": [
+      "Review DLP logs, confirm exposed data"
+    ],
+    "long_term": [
+      "Audit cloud permissions, secure configurations",
+      "Restore data privacy, monitor for misuse",
+      "Update cloud policies, train admins"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Cloud Misconfiguration'}, {'tactic': 'Collection', 'technique': 'Data from Cloud Storage'}]",
+    "severity": "Critical",
+    "text": "Incident type: data leak. Severity: Critical. Tactics: [{'tactic': 'Initial Access', 'technique': 'Cloud Misconfiguration'}, {'tactic': 'Collection', 'technique': 'Data from Cloud Storage'}]. Vector: Misconfigured S3 Bucket. Phase: Identification. Action: Review DLP logs, confirm exposed data. Tools: ['Symantec DLP', 'AWS CloudTrail']. Response time: . Phase: Containment. Action: Restrict bucket access, revoke public links. Tools: ['AWS IAM', 'S3 Controls']. Response time: . Phase: Eradication. Action: Audit cloud permissions, secure configurations. Tools: ['CloudCheckr', 'Tenable']. Response time: . Phase: Recovery. Action: Restore data privacy, monitor for misuse. Tools: ['AWS Backup', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update cloud policies, train admins. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "backdoor_installation",
+    "title": "Backdoor Installation Response",
+    "incident_type": "backdoor installation",
+    "immediate": [
+      "Isolate server, block C2 traffic"
+    ],
+    "investigation": [
+      "Confirm backdoor via EDR, collect IOCs"
+    ],
+    "long_term": [
+      "Remove backdoor, patch vulnerabilities",
+      "Reimage server, monitor for reinfection",
+      "Update detection rules, conduct vuln scan"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Persistence', 'technique': 'Create or Modify System Process'}]",
+    "severity": "High",
+    "text": "Incident type: backdoor installation. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Persistence', 'technique': 'Create or Modify System Process'}]. Vector: Exploited Software Vulnerability. Phase: Identification. Action: Confirm backdoor via EDR, collect IOCs. Tools: ['Carbon Black', 'VirusTotal']. Response time: . Phase: Containment. Action: Isolate server, block C2 traffic. Tools: ['EDR', 'Firewall']. Response time: . Phase: Eradication. Action: Remove backdoor, patch vulnerabilities. Tools: ['YARA', 'Patching Platform']. Response time: . Phase: Recovery. Action: Reimage server, monitor for reinfection. Tools: ['SCCM', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Update detection rules, conduct vuln scan. Tools: ['Nessus', 'MISP']. Response time: ."
+  },
+  {
+    "category": "cryptojacking",
+    "title": "Cryptojacking Response",
+    "incident_type": "cryptojacking",
+    "immediate": [
+      "Isolate affected pods, revoke API keys"
+    ],
+    "investigation": [
+      "Analyze CPU usage, confirm cryptojacking"
+    ],
+    "long_term": [
+      "Remove malicious containers, update configs",
+      "Restore cluster operations, monitor resources",
+      "Review container security, update policies"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Cloud Misconfiguration'}, {'tactic': 'Execution', 'technique': 'Resource Hijacking'}]",
+    "severity": "Medium",
+    "text": "Incident type: cryptojacking. Severity: Medium. Tactics: [{'tactic': 'Initial Access', 'technique': 'Cloud Misconfiguration'}, {'tactic': 'Execution', 'technique': 'Resource Hijacking'}]. Vector: Container Misconfiguration. Phase: Identification. Action: Analyze CPU usage, confirm cryptojacking. Tools: ['Prometheus', 'Splunk']. Response time: . Phase: Containment. Action: Isolate affected pods, revoke API keys. Tools: ['Kubernetes RBAC', 'Firewall']. Response time: . Phase: Eradication. Action: Remove malicious containers, update configs. Tools: ['Kube-Hunter', 'Tenable']. Response time: . Phase: Recovery. Action: Restore cluster operations, monitor resources. Tools: ['Helm', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Review container security, update policies. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "supply_chain_attack",
+    "title": "Supply Chain Attack Response",
+    "incident_type": "supply chain attack",
+    "immediate": [
+      "Isolate affected systems, block vendor domains"
+    ],
+    "investigation": [
+      "Analyze SIEM logs, validate compromised software"
+    ],
+    "long_term": [
+      "Remove compromised software, verify integrity",
+      "Revert to trusted versions, monitor for anomalies",
+      "Audit supply chain, update vendor policies"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Supply Chain Compromise'}, {'tactic': 'Execution', 'technique': 'Trusted Relationship'}, {'tactic': 'Persistence', 'technique': 'Compromise Software Dependencies'}]",
+    "severity": "Critical",
+    "text": "Incident type: supply chain attack. Severity: Critical. Tactics: [{'tactic': 'Initial Access', 'technique': 'Supply Chain Compromise'}, {'tactic': 'Execution', 'technique': 'Trusted Relationship'}, {'tactic': 'Persistence', 'technique': 'Compromise Software Dependencies'}]. Vector: Compromised Software Update. Phase: Identification. Action: Analyze SIEM logs, validate compromised software. Tools: ['Splunk', 'VirusTotal']. Response time: . Phase: Containment. Action: Isolate affected systems, block vendor domains. Tools: ['EDR', 'Firewall']. Response time: . Phase: Eradication. Action: Remove compromised software, verify integrity. Tools: ['YARA', 'Tenable']. Response time: . Phase: Recovery. Action: Revert to trusted versions, monitor for anomalies. Tools: ['SCCM', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Audit supply chain, update vendor policies. Tools: ['Google Docs', 'MISP']. Response time: ."
+  },
+  {
+    "category": "zero-day_exploit",
+    "title": "Zero-Day Exploit Response",
+    "incident_type": "zero-day exploit",
+    "immediate": [
+      "Isolate server, block exploit traffic"
+    ],
+    "investigation": [
+      "Triage EDR alert, collect exploit artifacts"
+    ],
+    "long_term": [
+      "Apply emergency patch, scan for IOCs",
+      "Rebuild server, monitor for reinfection",
+      "Conduct vuln assessment, update EDR rules"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Execution', 'technique': 'Exploitation for Client Execution'}, {'tactic': 'Privilege Escalation', 'technique': 'Exploitation for Privilege Escalation'}]",
+    "severity": "Critical",
+    "text": "Incident type: zero-day exploit. Severity: Critical. Tactics: [{'tactic': 'Initial Access', 'technique': 'Exploit Public-Facing Application'}, {'tactic': 'Execution', 'technique': 'Exploitation for Client Execution'}, {'tactic': 'Privilege Escalation', 'technique': 'Exploitation for Privilege Escalation'}]. Vector: Exploited Zero-Day Vulnerability. Phase: Identification. Action: Triage EDR alert, collect exploit artifacts. Tools: ['CrowdStrike Falcon', 'Volatility']. Response time: . Phase: Containment. Action: Isolate server, block exploit traffic. Tools: ['EDR', 'Firewall']. Response time: . Phase: Eradication. Action: Apply emergency patch, scan for IOCs. Tools: ['Patching Platform', 'YARA']. Response time: . Phase: Recovery. Action: Rebuild server, monitor for reinfection. Tools: ['SCCM', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Conduct vuln assessment, update EDR rules. Tools: ['Nessus', 'MISP']. Response time: ."
+  },
+  {
+    "category": "business_email_compromise",
+    "title": "Business Email Compromise Response",
+    "incident_type": "business email compromise",
+    "immediate": [
+      "Suspend account, block sender IPs"
+    ],
+    "investigation": [
+      "Analyze login logs, confirm BEC"
+    ],
+    "long_term": [
+      "Reset credentials, scan for malware",
+      "Notify executives, implement MFA",
+      "Conduct BEC training, update email rules"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}, {'tactic': 'Collection', 'technique': 'Email Collection'}]",
+    "severity": "High",
+    "text": "Incident type: business email compromise. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}, {'tactic': 'Collection', 'technique': 'Email Collection'}]. Vector: Credential Phishing. Phase: Identification. Action: Analyze login logs, confirm BEC. Tools: ['Proofpoint', 'Microsoft 365 Logs']. Response time: . Phase: Containment. Action: Suspend account, block sender IPs. Tools: ['Email Gateway', 'Firewall']. Response time: . Phase: Eradication. Action: Reset credentials, scan for malware. Tools: ['Active Directory', 'CrowdStrike']. Response time: . Phase: Recovery. Action: Notify executives, implement MFA. Tools: ['Okta', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Conduct BEC training, update email rules. Tools: ['KnowBe4', 'MISP']. Response time: ."
+  },
+  {
+    "category": "credential_harvesting",
+    "title": "Credential Harvesting Response",
+    "incident_type": "credential harvesting",
+    "immediate": [
+      "Block malicious domains, reset credentials"
+    ],
+    "investigation": [
+      "Analyze IDS logs, confirm fake portal"
+    ],
+    "long_term": [
+      "Remove phishing site, update detection rules",
+      "Notify users, enforce MFA",
+      "Conduct phishing training, update SSO security"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}]",
+    "severity": "High",
+    "text": "Incident type: credential harvesting. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Credential Access', 'technique': 'Credentials from Phishing'}]. Vector: Fake Login Page. Phase: Identification. Action: Analyze IDS logs, confirm fake portal. Tools: ['Snort', 'Splunk']. Response time: . Phase: Containment. Action: Block malicious domains, reset credentials. Tools: ['Firewall', 'Okta']. Response time: . Phase: Eradication. Action: Remove phishing site, update detection rules. Tools: ['PhishTank', 'YARA']. Response time: . Phase: Recovery. Action: Notify users, enforce MFA. Tools: ['Microsoft 365', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Conduct phishing training, update SSO security. Tools: ['KnowBe4', 'MISP']. Response time: ."
+  },
+  {
+    "category": "living-off-the-land_attack",
+    "title": "Living-Off-The-Land Attack Response",
+    "incident_type": "living-off-the-land attack",
+    "immediate": [
+      "Isolate endpoint, block C2"
+    ],
+    "investigation": [
+      "Triage EDR alert, analyze PowerShell logs"
+    ],
+    "long_term": [
+      "Remove malicious scripts, update EDR rules",
+      "Reimage endpoint, monitor network",
+      "Restrict PowerShell, conduct training"
+    ],
+    "tactics": "[{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Execution', 'technique': 'PowerShell'}, {'tactic': 'Persistence', 'technique': 'Scheduled Task/Job'}]",
+    "severity": "High",
+    "text": "Incident type: living-off-the-land attack. Severity: High. Tactics: [{'tactic': 'Initial Access', 'technique': 'Phishing'}, {'tactic': 'Execution', 'technique': 'PowerShell'}, {'tactic': 'Persistence', 'technique': 'Scheduled Task/Job'}]. Vector: Phishing Email. Phase: Identification. Action: Triage EDR alert, analyze PowerShell logs. Tools: ['CrowdStrike Falcon', 'Sysmon']. Response time: . Phase: Containment. Action: Isolate endpoint, block C2. Tools: ['EDR', 'Firewall']. Response time: . Phase: Eradication. Action: Remove malicious scripts, update EDR rules. Tools: ['YARA', 'Microsoft Defender']. Response time: . Phase: Recovery. Action: Reimage endpoint, monitor network. Tools: ['SCCM', 'SIEM']. Response time: . Phase: Lessons Learned. Action: Restrict PowerShell, conduct training. Tools: ['Google Docs', 'MISP']. Response time: ."
+  }
+]

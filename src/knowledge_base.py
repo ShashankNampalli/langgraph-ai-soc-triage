@@ -1,6 +1,12 @@
-"""Security playbook knowledge base for RAG-powered remediation."""
+"""Embedded playbook fallback and RAG-backed retrieval."""
 
 from __future__ import annotations
+
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PLAYBOOKS: dict[str, dict] = {
     "unauthorized_access": {
@@ -129,16 +135,110 @@ PLAYBOOKS: dict[str, dict] = {
             "Set up automated remediation for critical configs",
         ],
     },
+    "ransomware": {
+        "title": "Ransomware Incident Response",
+        "immediate": [
+            "Isolate infected endpoints from the network",
+            "Disable compromised accounts and service principals",
+            "Preserve disk images and memory dumps",
+            "Block known ransomware C2 infrastructure",
+        ],
+        "investigation": [
+            "Identify ransomware family and encryption scope",
+            "Determine initial access vector",
+            "Map lateral movement and privilege escalation",
+            "Assess backup integrity and recovery options",
+        ],
+        "long_term": [
+            "Implement immutable backups",
+            "Deploy EDR with ransomware behavioral detection",
+            "Conduct tabletop exercises for ransomware scenarios",
+            "Segment critical assets from general corporate network",
+        ],
+    },
+    "lateral_movement": {
+        "title": "Lateral Movement Response",
+        "immediate": [
+            "Block RDP/SSH from suspicious source IPs",
+            "Reset credentials for affected accounts",
+            "Isolate hosts showing anomalous remote access",
+            "Enable enhanced logging on domain controllers",
+        ],
+        "investigation": [
+            "Trace authentication events across affected hosts",
+            "Identify pivot points and compromised accounts",
+            "Correlate with EDR and firewall logs",
+            "Determine data accessed during lateral movement",
+        ],
+        "long_term": [
+            "Implement privileged access management (PAM)",
+            "Deploy network micro-segmentation",
+            "Restrict RDP to jump hosts only",
+            "Enable MFA for all remote access",
+        ],
+    },
 }
+
+
+def _rag_enabled() -> bool:
+    return os.getenv("RAG_ENABLED", "true").lower() in ("true", "1", "yes")
+
+
+def _use_ingested_playbooks() -> bool:
+    return os.getenv("USE_INGESTED_PLAYBOOKS", "true").lower() in ("true", "1", "yes")
 
 
 def get_playbook(category: str) -> dict:
     """Retrieve the relevant playbook for a given alert category."""
+    if _use_ingested_playbooks():
+        try:
+            from .db import get_playbook_from_db, playbook_count
+
+            if playbook_count() > 0:
+                result = get_playbook_from_db(category)
+                if result:
+                    return result
+        except Exception:
+            pass
+
+    if _rag_enabled():
+        try:
+            from .rag.store import get_playbook_from_rag
+
+            result = get_playbook_from_rag(category)
+            if result:
+                return result
+        except Exception:
+            pass
     return PLAYBOOKS.get(category, PLAYBOOKS["anomalous_behavior"])
 
 
 def search_playbooks(query: str) -> list[dict]:
-    """Simple keyword search across playbooks (simulates RAG retrieval)."""
+    """Search playbooks by keyword or semantic similarity."""
+    if not query.strip():
+        return []
+
+    if _use_ingested_playbooks():
+        try:
+            from .db import playbook_count, search_playbooks_db
+
+            if playbook_count() > 0:
+                results = search_playbooks_db(query)
+                if results:
+                    return results
+        except Exception:
+            pass
+
+    if _rag_enabled():
+        try:
+            from .rag.store import search_playbooks_rag
+
+            results = search_playbooks_rag(query)
+            if results:
+                return results
+        except Exception:
+            pass
+
     results = []
     query_lower = query.lower()
     for category, playbook in PLAYBOOKS.items():
