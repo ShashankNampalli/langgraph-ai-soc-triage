@@ -8,6 +8,8 @@ build/
 .env
 .venv/
 venv/
+.cursor/
+.streamlit/secrets.toml
 .pytest_cache/
 .mypy_cache/
 data/qdrant/
