@@ -284,7 +284,7 @@ You do **not** need the Alert Queue or persistent SQLite for a strong portfolio 
    RAG_ENABLED = "false"
    ```
 
-   For live DeepSeek reasoning, set `OFFLINE_MODE = "false"` and add `DEEPSEEK_API_KEY`. See `.streamlit/secrets.toml.example`.
+   For live DeepSeek reasoning, set `OFFLINE_MODE = "false"` and add `DEEPSEEK_API_KEY`.
 
 5. Deploy. Link the live URL in your resume and README.
 

@@ -9,7 +9,7 @@ build/
 .venv/
 venv/
 .cursor/
-.streamlit/secrets.toml
+.streamlit/
 .pytest_cache/
 .mypy_cache/
 data/qdrant/
