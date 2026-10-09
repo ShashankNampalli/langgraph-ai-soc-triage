@@ -9,7 +9,8 @@ build/
 .venv/
 venv/
 .cursor/
-.streamlit/
+# Streamlit: track theme config, ignore local secrets
+.streamlit/secrets.toml
 .pytest_cache/
 .mypy_cache/
 data/qdrant/

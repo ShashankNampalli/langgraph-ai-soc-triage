@@ -3,21 +3,17 @@
 from __future__ import annotations
 
 import json
-import os
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from dotenv import load_dotenv
-
 from .models import SecurityAlert
+from .paths import default_db_path
 
-load_dotenv()
-
-DATA_DIR = Path(os.getenv("DATA_DIR", "data"))
-DB_PATH = Path(os.getenv("SQLITE_DB", DATA_DIR / "triage.db"))
+# Mutable so tests / seed can retarget without rewriting helpers.
+DB_PATH: Path = default_db_path()
 
 
 def _connect() -> sqlite3.Connection:
@@ -148,6 +144,58 @@ def insert_alert(conn: sqlite3.Connection, row: dict[str, Any]) -> None:
             json.dumps(row, default=str),
         ),
     )
+
+
+def insert_security_alert(
+    conn: sqlite3.Connection,
+    alert: SecurityAlert,
+    *,
+    event_type: str = "curated_demo",
+    severity: str = "demo",
+) -> None:
+    """Persist a SecurityAlert (curated scenarios) into the alerts table."""
+    conn.execute(
+        """
+        INSERT OR REPLACE INTO alerts
+        (event_id, event_type, source, severity, description, timestamp,
+         title, affected_resource, raw_indicators, raw_json)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            alert.alert_id,
+            event_type,
+            alert.source,
+            severity,
+            alert.description,
+            alert.timestamp,
+            alert.title,
+            alert.affected_resource,
+            json.dumps(alert.raw_indicators),
+            json.dumps(alert.model_dump(), default=str),
+        ),
+    )
+
+
+def db_stats() -> dict[str, int]:
+    """Row counts for sidebar / fleet snapshot panels."""
+    with get_conn() as conn:
+        alerts = int(conn.execute("SELECT COUNT(*) FROM alerts").fetchone()[0])
+        playbooks = int(conn.execute("SELECT COUNT(*) FROM playbooks").fetchone()[0])
+        runs = int(conn.execute("SELECT COUNT(*) FROM triage_runs").fetchone()[0])
+    return {"alerts": alerts, "playbooks": playbooks, "runs": runs}
+
+
+def severity_breakdown() -> dict[str, int]:
+    """Alert counts keyed by lowercased severity for KPI tiles."""
+    with get_conn() as conn:
+        rows = conn.execute(
+            """
+            SELECT LOWER(COALESCE(severity, 'unknown')) AS sev, COUNT(*) AS c
+            FROM alerts
+            GROUP BY LOWER(COALESCE(severity, 'unknown'))
+            """
+        ).fetchall()
+    return {str(r["sev"]): int(r["c"]) for r in rows}
 
 
 def alert_count() -> int:

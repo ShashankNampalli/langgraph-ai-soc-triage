@@ -1,6 +1,5 @@
 """Tests for SQLite alert storage."""
 
-import json
 import tempfile
 from pathlib import Path
 
@@ -8,6 +7,7 @@ import pytest
 
 from src import db
 from src.models import SecurityAlert
+from src.seed import database_ready, seed
 
 
 @pytest.fixture
@@ -114,3 +114,37 @@ def test_save_triage_run(temp_db):
     assert len(runs) == 1
     detail = db.get_triage_run("run-1")
     assert detail["status"] == "executed"
+
+
+def test_insert_security_alert(temp_db):
+    alert = SecurityAlert(
+        alert_id="ALT-TEST-1",
+        source="UnitTest",
+        title="Test alert",
+        description="Seed path for curated scenarios",
+        raw_indicators=["ioc=1"],
+        affected_resource="host-1",
+        timestamp="2026-01-01T00:00:00Z",
+    )
+    with db.get_conn() as conn:
+        db.insert_security_alert(conn, alert, event_type="curated_demo", severity="demo")
+
+    loaded = db.get_alert("ALT-TEST-1")
+    assert loaded is not None
+    assert loaded.title == "Test alert"
+    stats = db.db_stats()
+    assert stats["alerts"] == 1
+
+
+def test_seed_creates_playbooks_and_curated_alerts(monkeypatch, tmp_path):
+    path = tmp_path / "seeded.db"
+    monkeypatch.setattr(db, "DB_PATH", path)
+    assert not database_ready(path)
+
+    seed(path)
+    assert database_ready(path)
+    assert db.playbook_count() >= 8
+    assert db.alert_count() >= 6
+    assert db.get_alert("ALT-2026-0847") is not None
+    assert db.get_playbook_from_db("malware") is not None
+

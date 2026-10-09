@@ -2,23 +2,24 @@
 
 from __future__ import annotations
 
-import os
 from typing import Any, Literal
 
-from dotenv import load_dotenv
-
-load_dotenv()
+from .config import get_setting
 
 LLMProvider = Literal["deepseek", "ollama"]
 
 
 def is_offline_mode() -> bool:
     """Return True when agents should use deterministic mock outputs."""
-    return os.getenv("OFFLINE_MODE", "false").lower() in ("true", "1", "yes")
+    return (get_setting("OFFLINE_MODE", "false") or "false").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
 
 
 def get_llm_provider() -> LLMProvider:
-    provider = os.getenv("LLM_PROVIDER", "deepseek").lower()
+    provider = (get_setting("LLM_PROVIDER", "deepseek") or "deepseek").lower()
     if provider not in ("deepseek", "ollama"):
         raise ValueError(
             f"Unsupported LLM_PROVIDER '{provider}'. Use 'deepseek' or 'ollama'."
@@ -29,17 +30,24 @@ def get_llm_provider() -> LLMProvider:
 def _get_deepseek_llm(temperature: float) -> Any:
     from langchain_openai import ChatOpenAI
 
-    api_key = os.getenv("DEEPSEEK_API_KEY")
+    api_key = get_setting("DEEPSEEK_API_KEY")
     if not api_key:
         raise ValueError(
-            "DEEPSEEK_API_KEY is required when LLM_PROVIDER=deepseek. "
-            "Get a key at https://platform.deepseek.com"
+            "DEEPSEEK_API_KEY is not set. Use a .env file, environment variable, "
+            "or Streamlit secrets (.streamlit/secrets.toml / Cloud Secrets)."
         )
 
+    base_url = (
+        get_setting("DEEPSEEK_API_BASE")
+        or get_setting("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+        or "https://api.deepseek.com"
+    )
+    model = get_setting("DEEPSEEK_MODEL", "deepseek-chat") or "deepseek-chat"
+
     return ChatOpenAI(
-        model=os.getenv("DEEPSEEK_MODEL", "deepseek-chat"),
+        model=model,
         api_key=api_key,
-        base_url=os.getenv("DEEPSEEK_API_BASE", "https://api.deepseek.com"),
+        base_url=base_url,
         temperature=temperature,
     )
 
@@ -48,9 +56,10 @@ def _get_ollama_llm(temperature: float) -> Any:
     from langchain_ollama import ChatOllama
 
     return ChatOllama(
-        model=os.getenv("OLLAMA_MODEL", "qwen2.5:7b"),
+        model=get_setting("OLLAMA_MODEL", "qwen2.5:7b") or "qwen2.5:7b",
         temperature=temperature,
-        base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+        base_url=get_setting("OLLAMA_BASE_URL", "http://localhost:11434")
+        or "http://localhost:11434",
     )
 
 
@@ -71,8 +80,8 @@ def structured_output(llm: Any, schema: type) -> Any:
 
 def get_langfuse_callbacks() -> list:
     """Return Langfuse callback handlers when configured."""
-    public_key = os.getenv("LANGFUSE_PUBLIC_KEY")
-    secret_key = os.getenv("LANGFUSE_SECRET_KEY")
+    public_key = get_setting("LANGFUSE_PUBLIC_KEY")
+    secret_key = get_setting("LANGFUSE_SECRET_KEY")
     if not public_key or not secret_key:
         return []
 
@@ -82,7 +91,8 @@ def get_langfuse_callbacks() -> list:
         handler = CallbackHandler(
             public_key=public_key,
             secret_key=secret_key,
-            host=os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com"),
+            host=get_setting("LANGFUSE_HOST", "https://cloud.langfuse.com")
+            or "https://cloud.langfuse.com",
         )
         return [handler]
     except ImportError:

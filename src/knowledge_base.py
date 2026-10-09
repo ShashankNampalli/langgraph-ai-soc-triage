@@ -2,11 +2,7 @@
 
 from __future__ import annotations
 
-import os
-
-from dotenv import load_dotenv
-
-load_dotenv()
+from .config import get_setting
 
 PLAYBOOKS: dict[str, dict] = {
     "unauthorized_access": {
@@ -181,11 +177,15 @@ PLAYBOOKS: dict[str, dict] = {
 
 
 def _rag_enabled() -> bool:
-    return os.getenv("RAG_ENABLED", "true").lower() in ("true", "1", "yes")
+    return (get_setting("RAG_ENABLED", "true") or "true").lower() in ("true", "1", "yes")
 
 
 def _use_ingested_playbooks() -> bool:
-    return os.getenv("USE_INGESTED_PLAYBOOKS", "true").lower() in ("true", "1", "yes")
+    return (get_setting("USE_INGESTED_PLAYBOOKS", "true") or "true").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
 
 
 def get_playbook(category: str) -> dict:

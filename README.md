@@ -166,13 +166,27 @@ pip install -e ".[dev]"
 cp .env.example .env
 ```
 
-Set your DeepSeek API key in `.env`:
+Set your DeepSeek API key with **either**:
+
+**Option A — `.env`**
 
 ```env
 LLM_PROVIDER=deepseek
 DEEPSEEK_API_KEY=sk-your-key-here
 DEEPSEEK_MODEL=deepseek-chat
 OFFLINE_MODE=false
+```
+
+**Option B — Streamlit secrets** (local or Cloud)
+
+Copy `.streamlit/secrets.toml.example` → `.streamlit/secrets.toml` (gitignored):
+
+```toml
+DEEPSEEK_API_KEY = "sk-your_key_here"
+DEEPSEEK_API_BASE = "https://api.deepseek.com"
+LLM_PROVIDER = "deepseek"
+OFFLINE_MODE = "false"
+RAG_ENABLED = "false"
 ```
 
 ### Tests (no API key)
@@ -193,14 +207,22 @@ python -m src.demo --alert 0 --auto-approve
 
 ```bash
 pip install -e ".[ui]"
-python scripts/ingest_alerts.py
 streamlit run app/streamlit_app.py
 ```
 
-### Ingest playbooks
+On first run the app **auto-seeds** SQLite from `data/playbooks.json`, embedded playbooks, and the six curated demo alerts (same pattern as the NL Data Agent sample DB). No Hugging Face ingest required for a working demo.
+
+Manual seed / refresh:
 
 ```bash
-python scripts/ingest_playbooks.py
+python -m src.seed
+```
+
+### Optional: ingest larger datasets
+
+```bash
+python scripts/ingest_playbooks.py   # refresh playbooks from Hugging Face
+python scripts/ingest_alerts.py      # load synthetic SIEM alert queue
 ```
 
 Optional Qdrant index: `docker compose up -d qdrant` then `pip install -e ".[rag]"` and `python scripts/ingest_playbooks.py --qdrant`.
@@ -227,7 +249,7 @@ Use `OFFLINE_MODE=true` for deterministic gate behavior in tests.
 ## Project Structure
 
 ```
-app/streamlit_app.py       # SOC analyst console
+app/streamlit_app.py       # SOC analyst console (hero, ops snapshot, architecture)
 src/
 ├── graph.py               # LangGraph workflow + HITL interrupts
 ├── agents.py              # Classify, investigate, remediate
@@ -236,9 +258,14 @@ src/
 ├── llm.py                 # DeepSeek / Ollama / offline mode
 ├── demo.py                # CLI demo
 ├── db.py                  # SQLite alerts, playbooks, audit log
+├── seed.py                # Idempotent first-run seed (JSON + curated)
+├── paths.py / config.py   # Project-root paths + env/secrets settings
 ├── hitl/                  # CLI approval backend
 ├── guardrails/            # Input/output safety checks
 └── rag/                   # Qdrant vector store
+data/
+├── playbooks.json         # Seed source for playbooks (committed)
+└── triage.db              # Runtime SQLite (gitignored; auto-built)
 scripts/
 ├── ingest_playbooks.py
 └── ingest_alerts.py
@@ -256,8 +283,10 @@ tests/
 | `OFFLINE_MODE` | `false` | Deterministic mocks for tests |
 | `USE_INGESTED_PLAYBOOKS` | `true` | Prefer SQLite-ingested playbooks |
 | `RAG_ENABLED` | `true` | Use Qdrant when available |
-| `SQLITE_DB` | `data/triage.db` | Database path |
+| `SQLITE_DB` | `data/triage.db` | Database path (resolved under project root) |
 | `SIEM_ALERT_LIMIT` | `5000` | Max alerts to ingest |
+
+SQLite is created on demand: schema via `init_db()`, sample rows via `python -m src.seed` or Streamlit `ensure_database()`.
 
 ---
 
@@ -266,25 +295,38 @@ tests/
 This app is portfolio-ready on [Streamlit Community Cloud](https://streamlit.io/cloud) — no VPS or database server required.
 
 **What visitors can try**
-- **Curated Demos** — six enterprise scenarios with real HITL approve/reject in the UI
+- **Curated Demos / Alert Queue** — six enterprise scenarios (auto-seeded into SQLite)
 - **Triage pipeline** — Classify → Investigate → Remediate with LangGraph `interrupt()` gates
+- **Playbooks** — browse seeded IR playbooks
+- **Architecture** — pipeline DAG and design notes
 - **Audit Log** — triage runs saved for the current session
 
-You do **not** need the Alert Queue or persistent SQLite for a strong portfolio demo. Curated Demos + embedded playbooks are enough.
+First deploy builds `data/triage.db` automatically from committed seed sources — no HF ingest step.
 
 **Deploy steps**
 
 1. Push this repo to GitHub (public repo for free tier).
 2. [share.streamlit.io](https://share.streamlit.io) → **New app** → select repo.
 3. Main file path: `app/streamlit_app.py`
-4. **Secrets** (Settings → Secrets) — free demo, no API cost:
+4. **Secrets** (Settings → Secrets):
+
+   Free demo (no API cost):
 
    ```toml
    OFFLINE_MODE = "true"
    RAG_ENABLED = "false"
    ```
 
-   For live DeepSeek reasoning, set `OFFLINE_MODE = "false"` and add `DEEPSEEK_API_KEY`.
+   Live DeepSeek reasoning:
+
+   ```toml
+   OFFLINE_MODE = "false"
+   RAG_ENABLED = "false"
+   LLM_PROVIDER = "deepseek"
+   DEEPSEEK_API_KEY = "sk-your_key_here"
+   DEEPSEEK_API_BASE = "https://api.deepseek.com"
+   DEEPSEEK_MODEL = "deepseek-chat"
+   ```
 
 5. Deploy. Link the live URL in your resume and README.
 
